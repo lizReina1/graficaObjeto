@@ -7,7 +7,6 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Runtime.Remoting.Messaging;
 
-
 namespace PlanoGenerico
 {
         public class Game : GameWindow
@@ -16,6 +15,9 @@ namespace PlanoGenerico
         public Televisor tv1;
         public Televisor tv2;
 
+        public Escenario escenario = new Escenario();
+        public Florero florero; 
+        public Parlante parlante;
 
         //movimiento
         private Vector3 cameraPosition = new Vector3(-5, 5, 20);
@@ -63,7 +65,12 @@ namespace PlanoGenerico
 
             tv1 = new Televisor(new Punto(15, 0, 0), 10, 13, 3, Color.Black);
 
-         //   tv2 = new Televisor(new Punto(5, 0, 20), 10, 13, 3, Color.Black);
+            florero = new Florero(new Punto(15, 10, 0), 5, 5, 3, Color.Black);
+            parlante = new Parlante(new Punto(-30, 0, 0), 5, 5, 3, Color.Black);
+
+            this.escenario.setList(tv);
+           // this.escenario.setList(tv1);
+            //   tv2 = new Televisor(new Punto(5, 0, 20), 10, 13, 3, Color.Black);
 
             base.OnLoad(e);
         }
@@ -93,10 +100,19 @@ namespace PlanoGenerico
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref viewMatrix);
             /////////////////////////////////////////////////
+            foreach (object recorro in this.escenario.getList())
+            {
+                if (recorro is Televisor)
+                {
+                    Televisor televisor = (Televisor)recorro;
+                    televisor.Dibujar(); // Llama al método Dibujar() del objeto Televisor
+                }
+            }
 
-            this.tv.Dibujar();
-            this.tv1.Dibujar();
-            //this.tv2.Dibujar();
+            this.florero.Dibujar();
+            this.parlante.Dibujar();
+            //this.tv.Dibujar();
+            //this.tv1.Dibujar();
 
             Context.SwapBuffers();
             base.OnRenderFrame(e);
